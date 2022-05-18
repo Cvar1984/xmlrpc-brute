@@ -1,0 +1,19 @@
+{
+    "name": "cvar1984/xmlrpc-brute",
+    "description": "Bruteforce wordpress",
+    "type": "application",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Cvar1984\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Cvar1984",
+            "email": "Cvar1984@pm.me"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
