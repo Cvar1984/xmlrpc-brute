@@ -15,5 +15,8 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {}
+    "require": {
+	"ext-xml": "*",
+	"ext-curl": "*"
+    }
 }
